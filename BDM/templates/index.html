@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block head %}
+    <title>トップページ</title>
+{% endblock %}
+
+{% block body %} 
+    <div class="w-80 p-4">
+        <form action="/register" method="POST">
+            <input name="TITLE" class="form-control" type="text" required>
+            <button class="btn btn-outline-secondary mt-3" type="submit">書き込み</button>
+        </form>
+        <ul class="list-group pt-4">
+            {% for Train in Trainlist %}
+                <li class="list-group-item">{{ Train.TrainName }}</li>
+            {% endfor %}    
+        </ul>
+    </div>
+{% endblock %}

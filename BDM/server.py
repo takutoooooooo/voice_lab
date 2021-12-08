@@ -3,7 +3,7 @@ import os
 import sys
 from argparse import ArgumentParser
 
-from flask import Flask, request, abort, g, session, request
+from flask import Flask, request, abort, g, session, redirect, render_template, url_for
 import sqlite3
 from flask_sqlalchemy import SQLAlchemy 
 
@@ -11,19 +11,20 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 db = SQLAlchemy(app)
 
-@app.route("/get_trains", methods=['GET'])
+@app.route("/", methods=['GET'])
 def get_trains():
     from trains_db import TrainTable
     TrainList = db.session.query(TrainTable).all()
-    return TrainList
+    return render_template('index.html', Trainlist=TrainList)
 
 @app.route("/register", methods=['POST'])
 def register():
+    from trains_db import TrainTable
     train_name = request.form.get('train')
     new_train = TrainTable(TrainName=train_name)
     db.session.add(new_train)
     db.session.commit()
-    return
+    return redirect(url_for('get_trains'))
 
 @app.route("/delete", methods=['POST'])
 def delete():
