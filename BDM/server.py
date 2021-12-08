@@ -1,0 +1,43 @@
+import time
+import os
+import sys
+from argparse import ArgumentParser
+
+from flask import Flask, request, abort, g, session, request
+import sqlite3
+from flask_sqlalchemy import SQLAlchemy 
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
+db = SQLAlchemy(app)
+
+@app.route("/get_trains", methods=['GET'])
+def get_trains():
+    from trains_db import TrainTable
+    TrainList = db.session.query(TrainTable).all()
+    return TrainList
+
+@app.route("/register", methods=['POST'])
+def register():
+    train_name = request.form.get('train')
+    new_train = TrainTable(TrainName=train_name)
+    db.session.add(new_train)
+    db.session.commit()
+    return
+
+@app.route("/delete", methods=['POST'])
+def delete():
+    # train_name = request.form.get('train')
+    # db.session.query(TrainTable).filter(TrainTable.TrainName=train_name).delete()
+    # db.session.commit()
+    return 
+
+if __name__ == "__main__":
+    arg_parser = ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port ] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', default=8000, help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    options = arg_parser.parse_args()
+
+    app.run(debug=options.debug, port=options.port)
