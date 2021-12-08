@@ -32,9 +32,9 @@ def register():
 @app.route("/delete", methods=['POST'])
 def delete():
     from trains_db import TrainTable
-        
+
     train_name = request.form.get('train')
-    db.session.query(TrainTable).filter(TrainTable.TrainName==train_name).delete()
+    db.session.query(TrainTable).filter(TrainTable.TrainName == train_name).delete()
     db.session.commit()
     return redirect(url_for('get_trains'))
 
