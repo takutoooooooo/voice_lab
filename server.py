@@ -11,15 +11,19 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 db = SQLAlchemy(app)
 
+
 @app.route("/", methods=['GET'])
 def get_trains():
     from trains_db import TrainTable
+
     TrainList = db.session.query(TrainTable).all()
+    print(TrainList[0].TrainName)
     return render_template('index.html', Trainlist=TrainList)
 
 @app.route("/register", methods=['POST'])
 def register():
     from trains_db import TrainTable
+
     train_name = request.form.get('train')
     new_train = TrainTable(TrainName=train_name)
     db.session.add(new_train)
@@ -28,10 +32,12 @@ def register():
 
 @app.route("/delete", methods=['POST'])
 def delete():
-    # train_name = request.form.get('train')
-    # db.session.query(TrainTable).filter(TrainTable.TrainName=train_name).delete()
-    # db.session.commit()
-    return 
+    from trains_db import TrainTable
+        
+    train_name = request.form.get('train')
+    db.session.query(TrainTable).filter(TrainTable.TrainName==train_name).delete()
+    db.session.commit()
+    return redirect(url_for('get_trains'))
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
