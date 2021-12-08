@@ -1,21 +1,20 @@
-import time
-import os
-import sys
 from argparse import ArgumentParser
 
-from flask import Flask, request, abort, g, session, redirect, render_template, url_for
-import sqlite3
-from flask_sqlalchemy import SQLAlchemy 
+from flask import Flask, request, redirect, render_template, url_for
+
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 db = SQLAlchemy(app)
+
 
 @app.route("/", methods=['GET'])
 def get_trains():
     from trains_db import TrainTable
     TrainList = db.session.query(TrainTable).all()
     return render_template('index.html', Trainlist=TrainList)
+
 
 @app.route("/register", methods=['POST'])
 def register():
@@ -26,12 +25,14 @@ def register():
     db.session.commit()
     return redirect(url_for('get_trains'))
 
+
 @app.route("/delete", methods=['POST'])
 def delete():
     # train_name = request.form.get('train')
     # db.session.query(TrainTable).filter(TrainTable.TrainName=train_name).delete()
     # db.session.commit()
-    return 
+    return
+
 
 if __name__ == "__main__":
     arg_parser = ArgumentParser(
