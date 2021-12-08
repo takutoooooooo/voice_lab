@@ -7,7 +7,12 @@
     <div class="w-80 p-4">
         <form action="/register" method="POST">
             <input name="train" class="form-control" type="text" required>
-            <button class="btn btn-outline-secondary mt-3" type="submit">書き込み</button>
+            <button class="btn btn-outline-secondary mt-3" type="submit">追加</button>
+        </form>
+    </br>
+        <form action="/delete" method="POST">
+            <input name="train" class="form-control" type="text" required>
+            <button class="btn btn-outline-secondary mt-3" type="submit">削除</button>
         </form>
         <ul class="list-group pt-4">
             {% for Train in Trainlist %}
