@@ -20,21 +20,28 @@ CHECK_LIST = [
         'company': '京急電鉄',
         'website': 'https://unkou.keikyu.co.jp/?from=top'
     },
+    {
+        'name': 'ブルーライン',
+        'company': '横浜市営地下鉄',
+        'website': 'hogehoge'
+    },
 ]
 
-JSON_ADDR = 'https://rti-giken.jp/fhc/api/train_tetsudo/delay.json'
+JSON_ADDR = 'https://tetsudo.rti-giken.jp/free/delay.json'
 
 SLACK_WEBHOOK_URL = os.environ['SLACK_WEBHOOK_URL']
 
 
-def lambda_handler(event, context):
+def lambda_handler():
 
     notify_delays = get_notify_delays()
 
     if not notify_delays:
         # 遅延が無ければ通知しない
+        print("no delay")
         return
 
+    print(notify_delays)
     # Slack用のメッセージを作成して投げる
     (title, detail) = get_message(notify_delays)
     post_slack(title, detail)
@@ -103,3 +110,7 @@ def post_slack(title, detail):
         print(e)
     else:
         print(response.status_code)
+
+
+if __name__ == "__main__":
+    lambda_handler()
