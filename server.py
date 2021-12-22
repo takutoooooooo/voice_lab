@@ -14,7 +14,6 @@ def get_trains():
     from trains_db import TrainTable
 
     TrainList = db.session.query(TrainTable).all()
-    print(TrainList[0].TrainName)
     return render_template('index.html', Trainlist=TrainList)
 
 

@@ -39,14 +39,14 @@ def lambda_handler():
     if not notify_delays:
         # 遅延が無ければ通知しない
         print("no delay")
-        return
+        return "no delay"
 
     print(notify_delays)
     # Slack用のメッセージを作成して投げる
-    (title, detail) = get_message(notify_delays)
+    (title, detail, voice_message) = get_message(notify_delays)
     post_slack(title, detail)
 
-    return
+    return voice_message
 
 
 def get_notify_delays():
@@ -77,6 +77,7 @@ def get_current_delays():
 
 def get_message(delays):
     title = "電車の遅延があります。"
+    voice_message = ""
 
     details = []
 
@@ -85,8 +86,9 @@ def get_message(delays):
         name = item['name']
         website = item['website']
         details.append(f'・{company}： {name}： <{website}|こちら>')
-
-    return title, '\n'.join(details)
+        voice_message.append(f'{name},')
+    voice_message += "が遅れている。これは訓練ではない。もう一度繰り返す。これは訓練ではない。"
+    return title, '\n'.join(details), voice_message
 
 
 def post_slack(title, detail):
