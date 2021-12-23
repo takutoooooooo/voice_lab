@@ -8,6 +8,6 @@ c.execute("select * from train")
 
 list = c.fetchall()
 
-print(list)
+print(list[0][1])
 
 conn.close()
